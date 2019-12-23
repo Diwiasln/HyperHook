@@ -70,13 +70,15 @@ if ($conn->query($sql)->num_rows == 1) {
     $Betastatus = $conn->query($sql)->fetch_object()->Betastatus;
 
     $conn->query("DELETE FROM `${Databasename}`.`${Codetable}` WHERE `License`='${License}'");
-    $conn->query("UPDATE `${Databasename}`.`${Usertable}` SET `Betastatus`='${Betastatus}', `Expires`='${Newsub}' WHERE `Username`='${Username}'");
+    $conn->query("UPDATE `${Databasename}`.`${Usertable}` SET `Betastatus`='${Betastatus}', Expires = Expires + '${Newsub}' WHERE `Username`='${Username}'");
+	
+	$latestsubdays = $Currentsub + $Newsub;
 
     if ($Newsub >= 25000000) {
       echo "{'Username':'${Username}','Authenticated':'true','Description':'Account ${Username} successfully updated (Expires in: Never).'}";
     }
     else {
-      echo "{'Username':'${Username}','Authenticated':'true','Description':'Account ${Username} successfully updated (Expires in: ${Newsub} days).'}";
+      echo "{'Username':'${Username}','Authenticated':'true','Description':'Account ${Username} successfully updated (Expires in: ${latestsubdays} days).'}";
     }
 
     die();
